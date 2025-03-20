@@ -1,16 +1,19 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Home () {
     const [poster, setPoster] = useState([]);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
-        const promise = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
-
-        promise.then(response => setPoster(response.data));
-    
-        promise.catch(error => console.log(error.response.data));
+        const promiseURL = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
+        promiseURL.then(response => {
+            setPoster(response.data);
+        });
+        promiseURL.catch(error => console.log(error.response.data));
     }, [])
 
     return (
@@ -19,9 +22,10 @@ export default function Home () {
                 <h1>Em Cartaz</h1>
             </Title>
             <Movies>
-                {poster.map((img, id) => (
+                {poster.map((movie, id) => (
                     <Movie key={id}>
-                        <img src={img.posterURL} alt="img" onClick={() => {navigate("")}}/>
+                        <img src={movie.posterURL} alt="img" onClick={() => {
+                            navigate(`/sessoes/${movie.id}`)}}/>
                     </Movie>
                 ))}
             </Movies>
