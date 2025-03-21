@@ -10,12 +10,12 @@ export default function Sessoes () {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get
-        (`https://mock-api.driven.com.br/api/v8/cineflex/movies/${movieId}/showtimes`)
+        axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${movieId}/showtimes`)
         .then(response => setSessao(response.data))
         .catch(error => console.log(error.response.data))
     }, [])
 
+    if(sessao.length === 0) return null;
 
     return (
         <Body>
@@ -24,12 +24,12 @@ export default function Sessoes () {
             </Title>
             <Movies>
                     <Movie>
-                            {sessao.days?.map(day => (
-                                <Sessions>
+                            {sessao.days.map(day => (
+                                <Sessions key={day.id}>
                                     <Day>{day.weekday}, {day.date}</Day>
                                     <Empty></Empty>
                                     <TimeContainer>
-                                        {day.showtimes?.map(showtime => (
+                                        {day.showtimes.map(showtime => (
                                             <Time key={showtime.id} onClick={() => navigate(`/assentos/${showtime.id}`)}>
                                                 <h3>{showtime.name}</h3>
                                             </Time>
@@ -63,6 +63,16 @@ const Body = styled.div`
         color: #FFFFFF;
     }
 `
+
+const Title = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 78px;
+    margin-top: 67px;
+`
+
 const Movies = styled.div`
     display: flex;
     flex-wrap: wrap; 
@@ -80,15 +90,6 @@ const Movie = styled.div`
     }
 
 `
-
-const Title = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 78px;
-    margin-top: 67px;
-`;
 
 const Sessions = styled.div`
     width: 338px;
@@ -114,6 +115,7 @@ const TimeContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-between;
 `;
 
 const Time = styled.div`
@@ -140,6 +142,6 @@ const Time = styled.div`
 `
 
 const Empty = styled.div`
-    width: 302px;
+    width: 80%;
     border: 1px solid #4E5A65
 `
