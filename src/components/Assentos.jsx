@@ -7,6 +7,8 @@ export default function Assentos () {
     const { showtimeId } = useParams();
     const navigate = useNavigate();
     const [assentos, setAssentos] = useState([]);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+  
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${showtimeId}/seats`)
@@ -17,13 +19,23 @@ export default function Assentos () {
 
     if(assentos.length === 0) return null;
 
-
     return (
         <Body>
             <Title>Selecione o(s) assento(s)</Title>
             <Seats>
                 {assentos.seats.map(seat => (
-                    <Seat key={seat.id}>{seat.name}</Seat>
+                    seat.isAvailable ? 
+                    <Seat key={seat.id}
+                        $selected={selectedSeats.includes(seat.id)}
+                        onClick={() => {
+                        selectedSeats.includes(seat.id) ? 
+                        setSelectedSeats(selectedSeats.filter(seatId => seatId !== seat.id)) :
+                        setSelectedSeats([...selectedSeats, seat.id])
+                        }}>
+                    <h1>{seat.name}</h1></Seat> : 
+                    <OccupiedSeat key={seat.id} onClick={() => alert("Esse assento não está disponível")}>
+                        <h1>{seat.name}</h1>
+                    </OccupiedSeat>
                 ))}
             </Seats>
             <Empty></Empty>
@@ -41,7 +53,6 @@ export default function Assentos () {
             </Button>
         </Body>
     )
-
 }
 
 const Body = styled.div`
@@ -95,9 +106,42 @@ const Seat = styled.div`
     width: 26px;
     height: 26px;
     border-radius: 12px;
-    background-color: #9DB899;
-    border: 1px solid #808F9D;
-    margin: 4px;
+    box-sizing: border-box;
+    background-color: ${(props) => props.$selected ? "#FADBC5" : "#9DB899"};
+    border: ${(props) => props.$selected ? "2px solid #EE897F" : "1px solid #808F9D"};
+    margin: 5px;
+    h1 {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 100%;
+        letter-spacing: 4%;
+        text-align: center;
+        vertical-align: middle;
+        color: #2B2D36;
+    }
+`
+
+const OccupiedSeat = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background-color: #2B2D36;
+    margin: 5px;
+    h1 {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 100%;
+        letter-spacing: 4%;
+        text-align: center;
+        vertical-align: middle;
+        color: #2B2D36;
+    }
 `
 
 const Empty = styled.div`
