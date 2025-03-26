@@ -3,12 +3,26 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function Assentos () {
+export default function Assentos ({ setSessionData, sessionData }) {
     const { showtimeId } = useParams();
     const navigate = useNavigate();
     const [assentos, setAssentos] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [name, setName] = useState("");
+	const [document, setDocument] = useState("");
   
+    function finalizar (event) {
+        event.preventDefault();
+
+        axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", 
+            {
+            ids: selectedSeats,
+            name: name,
+            cpf: document
+            })
+            .then(() => navigate("/sucesso"))
+            .catch(error => console.log(error.response.data))
+    }
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${showtimeId}/seats`)
@@ -39,18 +53,24 @@ export default function Assentos () {
                 ))}
             </Seats>
             <Empty></Empty>
-                <InfoName>
-                    <h1>Nome do comprador:</h1>
-                    <input type="text" placeholder="Digite seu nome..."/>
-                </InfoName>
-                <InfoName>
-                    <h1>CPF do comprador:</h1>
-                    <input type="text" placeholder="Digite seu CPF..."/>
-                </InfoName>
-            <Button 
-                onClick={() => navigate("/sucesso")}>
-                <h1>Reservar assento(s)</h1>
-            </Button>
+                <form onSubmit={finalizar}>
+                    <InfoName>
+                        <h1>Nome do comprador:</h1>
+                        <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Digite seu nome..." required />
+                    </InfoName>
+                    <InfoName>
+                        <h1>CPF do comprador:</h1>
+                        <input type="number" value={document} onChange={e => setDocument(e.target.value)} placeholder="Digite seu CPF..." required />
+                    </InfoName>
+                    <Button 
+                        type="submit"
+                        onClick={() => {
+                            const selectedSeatNames = selectedSeats.map(seatId => assentos.seats.find(seat => seat.id === seatId).name);
+                            setSessionData({...sessionData, seats: selectedSeatNames, buyer: name, buyerCPF: document});
+                            }}>
+                        <h1>Reservar assento(s)</h1>
+                    </Button>
+                </form>
         </Body>
     )
 }

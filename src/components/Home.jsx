@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Home () {
+export default function Home ({ setSessionData, sessionData }) {
     const [poster, setPoster] = useState([]);
     const navigate = useNavigate();
 
@@ -25,7 +25,9 @@ export default function Home () {
                 {poster.map((movie, id) => (
                     <Movie key={id}>
                         <img src={movie.posterURL} alt="img" onClick={() => {
-                            navigate(`/sessoes/${movie.id}`)}}/>
+                            navigate(`/sessoes/${movie.id}`)
+                            setSessionData({...sessionData, name: movie.title})
+                            }}/>
                     </Movie>
                 ))}
             </Movies>

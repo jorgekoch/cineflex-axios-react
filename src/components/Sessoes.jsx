@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Sessoes () {
+export default function Sessoes ({ setSessionData, sessionData }) {
     const { movieId } = useParams();
 
     const [sessao, setSessao] = useState([]);
@@ -30,7 +30,10 @@ export default function Sessoes () {
                                     <Empty></Empty>
                                     <TimeContainer>
                                         {day.showtimes.map(showtime => (
-                                            <Time key={showtime.id} onClick={() => navigate(`/assentos/${showtime.id}`)}>
+                                            <Time key={showtime.id} onClick={() => {
+                                                navigate(`/assentos/${showtime.id}`)
+                                                setSessionData({...sessionData, date: day.date, time: showtime.name})
+                                                }}>
                                                 <h3>{showtime.name}</h3>
                                             </Time>
                                         ))}
