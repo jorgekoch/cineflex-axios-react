@@ -2,6 +2,8 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import loadingGif from "../images/loading.gif";
+
 
 export default function Home ({ setSessionData, sessionData }) {
     const [poster, setPoster] = useState([]);
@@ -15,6 +17,17 @@ export default function Home ({ setSessionData, sessionData }) {
         });
         promiseURL.catch(error => console.log(error.response.data));
     }, [])
+
+    if (poster.length === 0) { 
+        return (
+            <Body $posterlength={poster.length}>
+                <Title>
+                    <h1>Em Cartaz</h1>
+                </Title>
+                <Loading src={loadingGif} />
+            </Body>
+        );
+    }
 
     return (
         <Body>
@@ -41,7 +54,7 @@ const Body = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: ${(props) => props.$posterlength === 0 ? "100vh" : "100%"};
     background-color: #212226;
     h1 {
         font-family: Sarala;
@@ -80,3 +93,12 @@ const Title = styled.div`
     height: 78px;
     margin-top: 67px;
 `;
+
+const Loading = styled.img`
+    display: flex;
+
+    width: 50px;
+    height: 50px;
+    background-color: #FFFFFF;
+    opacity: 0.8;
+`

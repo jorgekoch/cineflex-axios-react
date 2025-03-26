@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import loadingGif from "../images/loading.gif";
 
 export default function Sessoes ({ setSessionData, sessionData }) {
     const { movieId } = useParams();
@@ -15,7 +16,16 @@ export default function Sessoes ({ setSessionData, sessionData }) {
         .catch(error => console.log(error.response.data))
     }, [])
 
-    if(sessao.length === 0) return null;
+    if (sessao.length === 0) { 
+        return (
+            <Body $sessionlength={sessao.length}>
+                <Title>
+                    <h1>Em Cartaz</h1>
+                </Title>
+                <Loading src={loadingGif} />
+            </Body>
+        );
+    }
 
     return (
         <Body>
@@ -53,7 +63,7 @@ const Body = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: ${(props) => props.$sessionlength === 0 ? "100vh" : "100%"};
     background-color: #212226;
     h1 {
         font-family: Sarala;
@@ -147,4 +157,15 @@ const Time = styled.div`
 const Empty = styled.div`
     width: 80%;
     border: 1px solid #4E5A65
+`
+
+const Loading = styled.img`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: #FFFFFF;
+    opacity: 0.8;
 `

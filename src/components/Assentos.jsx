@@ -2,6 +2,8 @@ import styled from "styled-components"
 import axios from "axios"
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import loadingGif from "../images/loading.gif";
+
 
 export default function Assentos ({ setSessionData, sessionData }) {
     const { showtimeId } = useParams();
@@ -31,7 +33,16 @@ export default function Assentos ({ setSessionData, sessionData }) {
     }
     , [])
 
-    if(assentos.length === 0) return null;
+    if (assentos.length === 0) { 
+        return (
+            <Body>
+                <Title>
+                    <h1>Em Cartaz</h1>
+                </Title>
+                <Loading src={loadingGif} />
+            </Body>
+        );
+    }
 
     return (
         <Body>
@@ -206,4 +217,15 @@ const Button = styled.button`
         vertical-align: middle;
         color: #2B2D36;
     }
+`
+
+const Loading = styled.img`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: #FFFFFF;
+    opacity: 0.8;
 `
