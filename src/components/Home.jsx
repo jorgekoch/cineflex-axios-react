@@ -20,7 +20,7 @@ export default function Home ({ setSessionData, sessionData }) {
 
     if (poster.length === 0) { 
         return (
-            <Body $posterlength={poster.length}>
+            <Body>
                 <Title>
                     <h1>Em Cartaz</h1>
                 </Title>
@@ -54,7 +54,7 @@ const Body = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: ${(props) => props.$posterlength === 0 ? "100vh" : "100%"};
+    min-height: 100vh;
     background-color: #212226;
     h1 {
         font-family: Sarala;

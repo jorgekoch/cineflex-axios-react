@@ -11,20 +11,22 @@ export default function Sucesso ({ sessionData }) {
             </Title>
             <SessionData>
                 <h1>Filme e Sessão</h1>
-                <h2><p>{sessionData.name}</p>
-                    {sessionData.date} às {sessionData.time}
-                </h2>
                 <Empty></Empty>
+                <div>
+                    <h2>{sessionData.name}</h2>
+                    <h2>{sessionData.date} às {sessionData.time}</h2>
+                </div>
                 <h1>Ingressos</h1>
-                <h2>{sessionData.seats.map(seat => (
-                    <p key={seat}>Assento {seat}</p>
-                ))}</h2>
                 <Empty></Empty>
+                <div>{sessionData.seats.map(seat => (
+                    <h2 key={seat}>Assento {seat}</h2>
+                ))}</div>
                 <h1>Comprador</h1>
-                <h2><p>{sessionData.buyer}</p>
-                    {sessionData.buyerCPF}
-                </h2>
                 <Empty></Empty>
+                <div>
+                    <h2>{sessionData.buyer}</h2>
+                    <h2>{sessionData.buyerCPF}</h2>
+                </div>
             </SessionData>
             <Button
                 onClick={() => navigate("/")}>
@@ -40,7 +42,7 @@ const Body = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #212226;
     h1 {
         font-family: Sarala;
@@ -73,39 +75,45 @@ const SessionData = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-around;
+    justify-content: flex-start;
     width: 338px;
-    height: 421px;
+    padding: 20px; 
     border-radius: 8px;
     background-color: #2B2D36;
+    gap: 20px; 
+    margin-bottom: 20px; 
+
     h1 {
         font-family: Sarala;
-        font-weight: 700px;
+        font-weight: 700;
         font-size: 22px;
         line-height: 100%;
         letter-spacing: 4%;
-        vertical-align: middle;
         color: #EE897F;
-        margin-left: 19px;
     }
+
     h2 {
         font-family: Sarala;
-        font-weight: 400px;
+        font-weight: 400;
         font-size: 20px;
         line-height: 100%;
         letter-spacing: 4%;
-        vertical-align: middle;
         color: #FFFFFF;
-        margin-left: 19px;
-
+        margin-bottom: 10px;
     }
-    `
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px; 
+    }
+`;
 
 const Empty = styled.div`
-        width: 302px;
-        border: 1px solid #4E5A65;
-        margin: 20px;
-    `
+    width: 100%; 
+    border: 1px solid #4E5A65;
+    margin: 0 0 10px 0; 
+`;
 
 const Button = styled.button`
     width: 338px;

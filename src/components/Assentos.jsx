@@ -91,7 +91,7 @@ const Body = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #212226;
     h1 {
         font-family: Sarala;

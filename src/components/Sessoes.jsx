@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import loadingGif from "../images/loading.gif";
 
-export default function Sessoes ({ setSessionData, sessionData }) {
+export default function Sessoes({ setSessionData, sessionData }) {
     const { movieId } = useParams();
 
     const [sessao, setSessao] = useState([]);
@@ -12,13 +12,13 @@ export default function Sessoes ({ setSessionData, sessionData }) {
 
     useEffect(() => {
         axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${movieId}/showtimes`)
-        .then(response => setSessao(response.data))
-        .catch(error => console.log(error.response.data))
+            .then(response => setSessao(response.data))
+            .catch(error => console.log(error.response.data))
     }, [])
 
-    if (sessao.length === 0) { 
+    if (sessao.length === 0) {
         return (
-            <Body $sessionlength={sessao.length}>
+            <Body>
                 <Title>
                     <h1>Em Cartaz</h1>
                 </Title>
@@ -33,25 +33,23 @@ export default function Sessoes ({ setSessionData, sessionData }) {
                 <h1>Selecione o horário</h1>
             </Title>
             <Movies>
-                    <Movie>
-                            {sessao.days.map(day => (
-                                <Sessions key={day.id}>
-                                    <Day>{day.weekday}, {day.date}</Day>
-                                    <Empty></Empty>
-                                    <TimeContainer>
-                                        {day.showtimes.map(showtime => (
-                                            <Time key={showtime.id} onClick={() => {
-                                                navigate(`/assentos/${showtime.id}`)
-                                                setSessionData({...sessionData, date: day.date, time: showtime.name})
-                                                }}>
-                                                <h3>{showtime.name}</h3>
-                                            </Time>
-                                        ))}
-                                    </TimeContainer>
-                                </Sessions>
-                            ))
-                            }
-                    </Movie>
+                {sessao.days.map(day => (
+                    <Sessions key={day.id}>
+                        <Day>{day.weekday}, {day.date}</Day>
+                        <Empty></Empty>
+                        <TimeContainer>
+                            {day.showtimes.map(showtime => (
+                                <Time key={showtime.id} onClick={() => {
+                                    navigate(`/assentos/${showtime.id}`)
+                                    setSessionData({ ...sessionData, date: day.date, time: showtime.name })
+                                }}>
+                                    <h3>{showtime.name}</h3>
+                                </Time>
+                            ))}
+                        </TimeContainer>
+                    </Sessions>
+                ))
+                }
             </Movies>
         </Body>
     )
@@ -63,7 +61,7 @@ const Body = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: ${(props) => props.$sessionlength === 0 ? "100vh" : "100%"};
+    min-height: 100vh;
     background-color: #212226;
     h1 {
         font-family: Sarala;
@@ -91,17 +89,7 @@ const Movies = styled.div`
     flex-wrap: wrap; 
     justify-content: center; 
     gap: 20px; 
-    width: 100%; 
-    margin-top: 20px;
-`
-
-const Movie = styled.div`
-    img {
-        width: 145px;
-        height: 210px;
-        border-radius: 8px;
-    }
-
+    width: 100%;
 `
 
 const Sessions = styled.div`
